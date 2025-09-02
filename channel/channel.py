@@ -11,6 +11,8 @@ class Channel:
         return x + (noise_real + 1j * noise_imag)
     
     def __call__(self, x):
+        avg_power = np.mean(np.abs(x) ** 2)
+        x = x / np.sqrt(np.mean(np.abs(x)**2))
         sigma = np.sqrt(1 / (2 * (10 ** (self.snr_db / 10))))
         if self.chan_type == "awgn":
             return self.gaussian_noise(x, sigma)
