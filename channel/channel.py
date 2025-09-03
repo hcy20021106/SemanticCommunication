@@ -11,9 +11,12 @@ class Channel:
         return x + (noise_real + 1j * noise_imag)
     
     def __call__(self, x):
-        avg_power = np.mean(np.abs(x) ** 2)
-        x = x / np.sqrt(np.mean(np.abs(x)**2))
-        sigma = np.sqrt(1 / (2 * (10 ** (self.snr_db / 10))))
+        # avg_power = np.mean(np.abs(x) ** 2)
+        # x = x / np.sqrt(np.mean(np.abs(x)**2))
+        avg_power = np.mean(np.abs(x)**2)
+        # 以“实际符号平均功率/噪声功率比”来定义 SNR
+        sigma = np.sqrt(avg_power / (2 * (10 ** (self.snr_db / 10))))
+        # sigma = np.sqrt(1 / (2 * (10 ** (self.snr_db / 10))))
         if self.chan_type == "awgn":
             return self.gaussian_noise(x, sigma)
         if self.chan_type == "rayleigh":
